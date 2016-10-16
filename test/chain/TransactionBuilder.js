@@ -3,7 +3,7 @@ const options = {
     // pass: "password",
     // url: "ws://127.0.0.1:8090",
     apis: ["database_api", "network_broadcast_api"],
-    url: "wss://node.steem.ws"
+    url: "ws://golos.steem.ws"
 };
 
 var {Client} = require('steem-rpc');
