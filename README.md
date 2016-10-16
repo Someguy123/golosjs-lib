@@ -1,15 +1,18 @@
-# SteemJS (steemjs-lib)
+# GolosJS (golosjs-lib)
 
-Pure JavaScript Steem crypto library for node.js and browsers. Can be used to construct, sign and broadcast transactions in JavaScript.
+Pure JavaScript Golos crypto library for node.js and browsers. Can be used to construct, sign and broadcast transactions in JavaScript.
 
 [![npm version](https://img.shields.io/npm/v/steemjs-lib.svg?style=flat-square)](https://www.npmjs.com/package/steemjs-lib)
 [![npm downloads](https://img.shields.io/npm/dm/steemjs-lib.svg?style=flat-square)](https://www.npmjs.com/package/steemjs-lib)
+
+**NOTE: Since the only thing changed in GOLOS is address prefixing and assets, this library still uses `steem-rpc`. This means you will probably
+be using a mixture of steem-rpc AND golosjs-lib.**
 
 ## Setup
 
 This library can be obtained through npm:
 ```
-npm install steemjs-lib
+npm install golosjs-lib
 ```
 
 DISCLAIMER: This is a work in progress and most likely there will be bugs. Please file issues if you encounter any problems.
@@ -24,7 +27,7 @@ There's a quite extensive suite of tests that can be run using `npm run test`. T
 Three sub-libraries are included: `ECC`, `Chain` and `Serializer`. Generally only the `ECC` and `Chain` libraries need to be used directly.
 
 ### API setup
-When constructing a Steem transaction and also when verifying the password/private key of an account, some data from the blockchain is required. Because of this, `steemjs-lib` includes a dependency on [steem-rpc](https://github.com/svk31/steem-rpc), which is a websocket API library for connecting to Steem API servers. Before attempting to broadcast a transaction you will need to initialise this library. By default it will connect to a public API server provided by [xeroc and jesta](https://steemit.com/steemws/@jesta/steem-ws-the-public-steem-api-cluster), but you can change this in the options if you prefer to use your own server.
+When constructing a Golos transaction and also when verifying the password/private key of an account, some data from the blockchain is required. Because of this, `golosjs-lib` includes a dependency on [steem-rpc](https://github.com/svk31/steem-rpc), which is a websocket API library for connecting to Golos API servers. Before attempting to broadcast a transaction you will need to initialise this library. By default it will connect to a public API server provided by [xeroc and jesta](https://golosit.com/steemws/@jesta/steem-ws-the-public-steem-api-cluster), but you can change this in the options if you prefer to use your own server.
 
 To initialise the API library, use the following code:
 
@@ -56,13 +59,13 @@ Once the init promise has been resolved, the API connection is ready and you can
 The Chain library contains utility functions related to the chain state, as well as a transaction builder and a login class.
 
 #### Transaction builder
-The transaction builder can be used to construct any transaction, sign it, and broadcast it. To broadcast a transaction you need to be connected to a `steemd` node with the `network_broadcast_api` enabled.
+The transaction builder can be used to construct any transaction, sign it, and broadcast it. To broadcast a transaction you need to be connected to a `golosd` node with the `network_broadcast_api` enabled.
 
 For an example of how to create transaction, see below:
 
 ```
 // First generate the private key using the Login class
-var { TransactionBuilder, Login } = require("steemjs-lib");
+var { TransactionBuilder, Login } = require("golosjs-lib");
 var login = new Login();
 login.setRoles(["posting"]);
 var loginSuccess = login.checkKeys({
@@ -91,12 +94,12 @@ tr.process_transaction(login, null, false);
 The third argument of `process_transaction` is `broadcast`. Setting it to false will simply construct the transaction and serialize it, without broadcasting it. If you want it to broadcast immediately, set it to `true`.
 
 #### Operation types
-For a list of possible operation types with their required and optional inputs, see this file: [operations.js](https://github.com/svk31/steemjs-lib/blob/master/lib/serializer/src/operations.js).
+For a list of possible operation types with their required and optional inputs, see this file: [operations.js](https://github.com/someguy123/golosjs-lib/blob/master/lib/serializer/src/operations.js).
 
 #### Login
 The Chain library includes the Login class that can be used to "log in" using an account name and a corresponding password or private key. Logging in here simply means verifying that the private key or password provided can be used to generate the private key for that account. The verification checks the public keys of the given account.
 
-The password used on [https://steemit.com](https://steemit.com) is compatible with this library. To run the Login tests, copy config.example.js and create a config.js. In this file you must provide two accounts, one with a password and one with a private key. The corresponding public keys can be found on [https://steemd.com](https://steemd.com).
+The password used on [https://golos.io](https://golos.io) is compatible with this library. To run the Login tests, copy config.example.js and create a config.js. In this file you must provide two accounts, one with a password and one with a private key. The corresponding public keys can be found on [https://golos.steemdb.com](https://golos.steemdb.com).
 
 The Login class uses the following format to generate private keys from account names and passwords:
 
@@ -121,7 +124,7 @@ The auths object should contain the auth arrays from the account object. An exam
 ```
 {
     active: [
-        ["GPH5Abm5dCdy3hJ1C5ckXkqUH2Me7dXqi9Y7yjn9ACaiSJ9h8r8mL", 1]
+        ["GLS5Abm5dCdy3hJ1C5ckXkqUH2Me7dXqi9Y7yjn9ACaiSJ9h8r8mL", 1]
     ]
 }
 ```
@@ -135,7 +138,7 @@ The ECC library contains all the crypto functions for private and public keys as
 As a quick example, here's how to generate a new private key from a seed (a brainkey for example):
 
 ```
-var {PrivateKey, key} = require("steemjs-lib");
+var {PrivateKey, key} = require("golosjs-lib");
 
 let seed = "THIS IS A TERRIBLE BRAINKEY SEED WORD SEQUENCE";
 let pkey = PrivateKey.fromSeed( key.normalize_brainKey(seed) );
