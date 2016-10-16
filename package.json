@@ -1,6 +1,6 @@
 {
   "name": "golosjs-lib",
-  "version": "0.3.7",
+  "version": "0.3.7-1",
   "description": "Pure JavaScript GOLOS library for node.js and browsers.",
   "browser": {
     "ws": false,
